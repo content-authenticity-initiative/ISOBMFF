@@ -32,6 +32,7 @@
 #include <iostream>
 #include <fstream>
 #include <cstring>
+#include <jsoncons/json.hpp>
 
 //----------------------------------
 // Adding support for JUMBF
@@ -122,13 +123,11 @@ public:
 	{
 		std::vector< std::pair< std::string, std::string > > props;
 
-		/*
-			// let's see what happens if we try to read in and then pretty print the JSON
-			jsoncons::json js = jsoncons::json::parse(jsonData);
-			std::stringstream ss;
-			ss << jsoncons::pretty_print(js);
-			props.push_back( { "Data", ss.str() } );
-		*/
+		// let's see what happens if we try to read in and then pretty print the JSON
+		jsoncons::json js = jsoncons::json::parse(jsonData);
+		std::stringstream ss;
+		ss << jsoncons::pretty_print(js);
+		props.push_back( { "Data", ss.str() } );
 	
 		return props;
 	}
