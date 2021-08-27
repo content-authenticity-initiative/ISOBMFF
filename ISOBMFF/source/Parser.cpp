@@ -145,6 +145,7 @@ namespace ISOBMFF
             && memcmp( n, "mdat", 4 ) != 0
             && memcmp( n, "moov", 4 ) != 0
             && memcmp( n, "pnot", 4 ) != 0
+			&& memcmp( n, "jumb", 4 ) != 0
         )
         {
             throw std::runtime_error( std::string( "File is not an ISO media file: " ) + path );

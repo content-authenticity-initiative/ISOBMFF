@@ -10,3 +10,6 @@
 [submodule "Submodules/XSTest"]
 	path = Submodules/XSTest
 	url = https://github.com/macmade/XSTest.git
+[submodule "jsoncons"]
+	path = jsoncons
+	url = https://github.com/danielaparker/jsoncons
