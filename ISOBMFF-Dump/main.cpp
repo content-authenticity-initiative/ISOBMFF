@@ -33,6 +33,7 @@
 #include <fstream>
 #include <cstring>
 #include <jsoncons/json.hpp>
+#include <jsoncons_ext/cbor/cbor.hpp>
 
 //----------------------------------
 // Adding support for JUMBF
@@ -87,7 +88,7 @@ class jumdBox: public ISOBMFF::Box
 		{
 			std::vector< std::pair< std::string, std::string > > props;
 
-			char bt[4];
+			char bt[5];
 			snprintf(bt, sizeof(bt), "%c%c%c%c", (char)uuid[0], (char)uuid[1], (char)uuid[2], (char)uuid[3]);
 			props.push_back( { "Box Type",            bt} );
 			props.push_back( { "Label",               label } );
@@ -136,12 +137,43 @@ private:
 	std::string	jsonData;
 };
 
+class cborBox : public ISOBMFF::Box
+{
+public:
+	cborBox( void ): Box( "cbor" )
+	{}
+	
+	void ReadData( ISOBMFF::Parser & /*parser*/, ISOBMFF::BinaryStream & stream )
+	{
+		std::vector< uint8_t > data( stream.ReadAllData() );
+		cborData.assign( data.begin(), data.end() );
+	}
+	
+	std::vector< std::pair< std::string, std::string > > GetDisplayableProperties( void ) const
+	{
+		std::vector< std::pair< std::string, std::string > > props;
+
+		// Parse the CBOR data into a json value
+		// let's see what happens if we try to read in and then pretty print the JSON
+		jsoncons::json js = jsoncons::cbor::decode_cbor<jsoncons::json>(cborData);
+		std::stringstream ss;
+		ss << jsoncons::pretty_print(js);
+		props.push_back( { "Data", ss.str() } );
+	
+		return props;
+	}
+
+private:
+	std::string	cborData;
+};
+
 static void RegisterJUMBFBoxes( ISOBMFF::Parser& inParser)
 {
 	inParser.RegisterContainerBox( "jumb" );
 	
 	inParser.RegisterBox( "jumd", [ = ]( void ) -> std::shared_ptr< jumdBox > { return std::make_shared< jumdBox >(); } );
 	inParser.RegisterBox( "json", [ = ]( void ) -> std::shared_ptr< jsonBox > { return std::make_shared< jsonBox >(); } );
+	inParser.RegisterBox( "cbor", [ = ]( void ) -> std::shared_ptr< cborBox > { return std::make_shared< cborBox >(); } );
 }
 
 

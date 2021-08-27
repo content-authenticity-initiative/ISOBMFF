@@ -85,12 +85,12 @@
             isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
-            argument = "/Users/lrosenth/INPUT/images/foo.manifest"
-            isEnabled = "NO">
+            argument = "/Users/lrosenth/INPUT/images/msft.manifest"
+            isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument
             argument = "/Users/lrosenth/INPUT/images/pngpalm-CAI.jumbf"
-            isEnabled = "YES">
+            isEnabled = "NO">
          </CommandLineArgument>
       </CommandLineArguments>
    </LaunchAction>
